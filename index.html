@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>Open Academy Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body, html, #heatmapArea {
+        margin:0;
+        padding:0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial;
+      }
+      .title {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.4);
+        pointer-events: none;
+      }
+      .about {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+    </style>
+    <link rel="shortcut icon" type="image/png" href="http://www.patrick-wied.at/img/favicon.png" />
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+  </head>
+  <body>
+    <div id="heatmapArea"></div>
+    <div class="title">Where we come from</div>
+    <div class="about">Made with &lt;3 by <a href="http://www.github.com/grant">@grant</a></div>
+    <script type="text/javascript" src="heatmap.js"></script>
+    <script type="text/javascript" src="heatmap-gmaps.js"></script>
+    <script type="text/javascript">
+      var map;
+      var heatmap;
+
+      window.onload = function(){
+        var myLatlng = new google.maps.LatLng(30, 0);
+        var myOptions = {
+          zoom: 1,
+          center: myLatlng,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: false,
+          scrollwheel: true,
+          draggable: true,
+          navigationControl: true,
+          mapTypeControl: false,
+          scaleControl: true,
+          disableDoubleClickZoom: false
+        };
+        map = new google.maps.Map(document.getElementById("heatmapArea"), myOptions);
+
+        heatmap = new HeatmapOverlay(map, {"radius":25, "visible":true, "opacity":60});
+
+        // document.getElementById("gen").onclick = function(){
+        //   var x = 5;
+        //   while(x--){
+
+        //     var lat = Math.random()*180;
+        //     var lng = Math.random()*180;
+        //     var count = Math.floor(Math.random()*180+1);
+
+        //     heatmap.addDataPoint(lat,lng,count);
+
+        //   }
+
+        // };
+
+        // document.getElementById("tog").onclick = function(){
+        //   heatmap.toggle();
+        // };
+
+        var testData={
+              max: 7,
+              data: [
+                {lat: 37.8700, lng: -122.2590, count: 5},
+                {lat: 45.3667, lng: -71.8455, count: 2},
+                {lat: 43.1190, lng: -79.2490, count: 2},
+                {lat: -22.8172, lng: -47.0694, count: 4},
+                {lat: 40.4433, lng: -79.9436, count: 26},
+                {lat: 40.808171, lng: -73.961790, count: 12},
+                {lat: 42.448510, lng: -76.478620, count: 16},
+                {lat: 43.5500, lng: -80.2500, count: 2},
+                {lat: 42.3744, lng: -71.1169, count: 8},
+                {lat: 60.1694, lng: 24.9500, count: 8},
+                {lat: 51.4983, lng: -0.1769, count: 4},
+                {lat: 49.8094, lng: -97.1328, count: 2},
+                {lat: 42.3598, lng: -71.0921, count: 26},
+                {lat: 40.7961, lng: -77.8628, count: 6},
+                {lat: 45.5050, lng: -73.6140, count: 1},
+                {lat: 40.3571, lng: -74.6702, count: 5},
+                {lat: 40.4240, lng: -86.9290, count: 6},
+                {lat: 49.276694, lng: -122.917071, count: 2},
+                {lat: 30.6302, lng: 104.0900, count: 6},
+                {lat: 1.2956, lng: 103.7767, count: 6},
+                {lat: 61.500022, lng: 23.766868, count: 6},
+                {lat: 50.673104, lng: -120.365921, count: 2},
+                {lat: 35.7133, lng: 139.7622, count: 6},
+                {lat: 43.548283, lng: -79.663411, count: 2},
+                {lat: 49.2611, lng: -123.2531, count: 4},
+                {lat: 32.8810, lng: -117.2380, count: 16},
+                {lat: 40.1105, lng: -88.2284, count: 4},
+                {lat: 45.3747, lng: -71.9306, count: 2},
+                {lat: 53.5244, lng: -113.5244, count: 3},
+                {lat: 51.077456, lng: -114.133478, count: 2},
+                {lat: 45.945428, lng: -66.640697, count: 2},
+                {lat: 45.422591, lng: -75.683071, count: 2},
+                {lat: 43.5483, lng: -79.6633, count: 1},
+                {lat: 43.0083, lng: -81.2719, count: 4},
+                {lat: 30.2861, lng: -97.7394, count: 6},
+                {lat: 52.2403, lng: 21.0192, count: 4},
+                {lat: 47.655335, lng: -122.303519, count: 8},
+                {lat: 43.4689, lng: -80.5400, count: 6},
+                {lat: 43.4753, lng: -80.5272, count: 2},
+                {lat: 43.7739, lng: -79.5000, count: 2}]
+            };
+
+
+        // this is important, because if you set the data set too early, the latlng/pixel projection doesn't work
+        google.maps.event.addListenerOnce(map, "idle", function(){
+          heatmap.setDataSet(testData);
+
+          // Fixes heatmap not loading bug
+          map.setZoom(3);
+        });
+
+      };
+
+    </script>
+  </body>
+</html>
